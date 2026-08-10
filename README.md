@@ -23,50 +23,6 @@ The system measures how *uncertain* the model is about each prediction, sends th
 
 ---
 
-## How it works
-
-```
-                    ┌─────────────────────────┐
-   raw features ──▶ │  MI → RFE (483 → 50)    │
-                    └───────────┬─────────────┘
-                                ▼
-                    ┌─────────────────────────┐
-                    │  Raw / SMOTE / CTGAN    │  3 training conditions
-                    └───────────┬─────────────┘
-                                ▼
-              ┌──────────────┬──┴───────────┬──────────────────┐
-              ▼              ▼              ▼                  │
-      Random Forest      XGBoost      1D CNN + Focal Loss      │
-       (baseline)     (cost-sensitive)   + MC Dropout          │
-                                             │                 │
-                                             ▼                 │
-                              ┌──────────────────────────┐     │
-                              │ 50 stochastic passes  →  │     │
-                              │ uncertainty per sample   │     │
-                              └────────────┬─────────────┘     │
-                                           ▼                   │
-                    ┌──────────────────────────────────────┐   │
-                    │  sort by uncertainty                 │   │
-                    │  top k%  ──▶ analyst (+ SHAP why)    │   │
-                    │  rest    ──▶ auto-decide             │   │
-                    └──────────────────────────────────────┘   │
-                                           │                   │
-                                           ▼                   ▼
-                                   miss rate, expected cost, ECE
-```
-
-**The three ingredients:**
-
-| Ingredient | What it does | Why |
-|---|---|---|
-| **Cost-sensitive learning** | Focal Loss `α`, XGBoost `scale_pos_weight` | Penalises missed ransomware more than false alarms |
-| **MC Dropout** | Keeps dropout on at inference, runs 50 forward passes | Spread across passes = uncertainty, no architecture change needed |
-| **Budget-constrained rejection** | Ranks by uncertainty, routes top *k*% | Turns a fixed analyst budget into targeted risk reduction |
-
-Plus **SHAP** explanations on routed samples (so the analyst sees *why*) and an **ECE calibration audit** (because triage only works if confidence scores mean something).
-
----
-
 ## Models and techniques
 
 **Models**
@@ -129,7 +85,7 @@ Three different feature modalities on purpose — if the triage layer only works
 
 ```bash
 git clone https://github.com/VigneshLoganathanRamesh/Cost-Sensitive-Uncertainty-Triage-for-SOC-Ransomware-Detection.git
-cd cs-ut-ransomware-detection
+cd Cost-Sensitive-Uncertainty-Triage-for-SOC-Ransomware-Detection
 
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
