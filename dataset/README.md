@@ -1,6 +1,6 @@
 # Datasets
 
-The raw data files are **not committed to this repository**. They are large, and each is redistributed under its own publisher's terms. This file lists exactly what the notebook expects and where to obtain it.
+The one of the raw data files(ember_2018_50000.parquet) are **not committed to this repository**. They are large, and each is redistributed under its own publisher's terms. This file lists exactly what the notebook expects and where to obtain it.
 
 ## Expected files
 
@@ -76,10 +76,3 @@ git add .gitattributes
 ```
 
 Check each dataset's licence before redistributing it — several research corpora permit use but not republication.
-
-## Ethical note
-
-None of these datasets contains direct personal identifiers; they hold behavioural counters, memory-forensic statistics and PE header features. Two residual risks are worth stating rather than assuming away:
-
-1. Goodware samples in a behavioural corpus may embed file paths, usernames or organisational artefacts inside string-derived features. This was not inspected in the current project.
-2. A system of this kind deployed on live endpoints *would* process user-identifying telemetry, at which point GDPR obligations around lawful basis, data minimisation and retention apply. Nothing in this offline evaluation transfers that assurance to deployment.
