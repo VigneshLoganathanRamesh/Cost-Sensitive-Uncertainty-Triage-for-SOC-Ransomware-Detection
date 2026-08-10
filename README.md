@@ -1,4 +1,4 @@
-# CS-UT: Cost-Sensitive Uncertainty Triage for Ransomware Detection
+# A cost-sensitive uncertainty triage for SOC workload management for ransomware detection.
 
 A ransomware detector that knows when it doesn't know — and hands those cases to a human.
 
@@ -96,8 +96,6 @@ Plus **SHAP** explanations on routed samples (so the analyst sees *why*) and an 
 
 Three different feature modalities on purpose — if the triage layer only works on one kind of data, it isn't much of a framework.
 
-⚠️ **The data files are not in this repo.** They're large and each publisher has their own redistribution terms. See [`dataset/README.md`](dataset/README.md) for filenames and download links.
-
 ---
 
 ## Repository structure
@@ -105,10 +103,13 @@ Three different feature modalities on purpose — if the triage layer only works
 ```
 .
 ├── code/
-│   ├── The_Code.ipynb     # the entire implementation (24 cells, run top to bottom)
-│   └── README.md          # cell-by-cell map + which variables to tweak
+│   └── The_Code.ipynb
 ├── dataset/
-│   └── README.md          # where to get the data, what to name the files
+│   ├── MLRan_labels.csv
+│   ├── MLRan_X_test_RFE.csv
+│   ├── MLRan_X_train_RFE.csv
+│   ├── Obfuscated-MalMem2022.parquet
+│   └── README.md
 ├── requirements.txt
 └── README.md
 ```
@@ -127,7 +128,7 @@ Three different feature modalities on purpose — if the triage layer only works
 ### Local
 
 ```bash
-git clone https://github.com/<your-username>/cs-ut-ransomware-detection.git
+git clone https://github.com/VigneshLoganathanRamesh/Cost-Sensitive-Uncertainty-Triage-for-SOC-Ransomware-Detection.git
 cd cs-ut-ransomware-detection
 
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
@@ -163,7 +164,7 @@ Run all 24 cells **in order**. The notebook is sequential — cell 12 needs vari
 | 0–4 | Setup, load MLRan, EDA | fast |
 | 5–6 | Feature selection, splits, SMOTE, CTGAN | medium |
 | 7–8 | Random Forest + XGBoost (Optuna: 100 trials) | medium |
-| 9–11 | **CNN grid search (108 configs) + MC Dropout** | 🐌 slowest — use a GPU |
+| 9–11 | **CNN grid search (108 configs) + MC Dropout** | slowest — use a GPU |
 | 12 | Triage + budget sweep | fast |
 | 13–14 | SHAP | medium |
 | 15–17 | Calibration, temperature scaling, McNemar, final table | medium |
@@ -255,6 +256,3 @@ Built on three public datasets — please cite them if you use this:
 - **CIC-MalMem-2022** — Carrier et al., ICISSP 2022, [doi:10.5220/0010908200003120](https://doi.org/10.5220/0010908200003120)
 - **EMBER-2018** — Anderson & Roth, [arXiv:1804.04637](https://arxiv.org/abs/1804.04637) (2018)
 
-MSc Cybersecurity project, National College of Ireland.
-
-This is defensive security research — detection and triage. The datasets remain under their publishers' licences; check before redistributing.
